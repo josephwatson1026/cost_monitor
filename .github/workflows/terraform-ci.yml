@@ -8,7 +8,7 @@ on:
 
 env:  
   AWS_REGION : "us-east-1"
-  ROLE_ARN: ${{ github.ref_name == 'main' && 'arn:aws:iam::873580382677:role/GitHubAction-AssumeRoleWithAction' || 'arn:aws:iam::016714367715:role/GitHubAction-AssumeRoleWithAction' }}
+  ROLE_TO_ASSUME: ${{ github.ref_name == 'main' && 'arn:aws:iam::873580382677:role/GitHubAction-AssumeRoleWithAction' || 'arn:aws:iam::016714367715:role/GitHubAction-AssumeRoleWithAction' }}
 
 permissions:
   id-token: write   # This is required for requesting the JWT
