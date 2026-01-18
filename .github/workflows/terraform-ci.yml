@@ -8,7 +8,7 @@ on:
 
 env:  
   AWS_REGION : "us-east-1"
-  ROLE_TO_ASSUME : "arn:aws:iam::016714367715:role/GitHubAction-AssumeRoleWithAction"
+  ROLE_ARN: ${{ github.ref_name == 'main' && 'arn:aws:iam::873580382677:role/GitHubAction-AssumeRoleWithAction' || 'arn:aws:iam::016714367715:role/GitHubAction-AssumeRoleWithAction' }}
 
 permissions:
   id-token: write   # This is required for requesting the JWT
@@ -17,6 +17,7 @@ permissions:
 jobs:
   cost-monitor:
     runs-on: ubuntu-latest  
+    environment: ${{ github.ref_name == 'main' && 'production' || 'general' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -30,7 +31,7 @@ jobs:
 
       - name: Verify AWS Identity
         run: aws sts get-caller-identity
-        
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
