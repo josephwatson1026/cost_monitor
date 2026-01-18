@@ -39,10 +39,12 @@ jobs:
           terraform_version: 1.14.3
 
       - name: Terraform Init General
+        working-directory: ./terraform/
         if: github.ref_name == 'general'
         run: terraform init -backend-config=backend-general.tf
 
       - name: Terraform Init Production
+        working-directory: ./terraform/
         if: github.ref_name == 'main'
         run: terraform init -backend-config=backend-production.tf
 
