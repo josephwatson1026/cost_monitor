@@ -41,7 +41,7 @@ jobs:
       - name: Terraform Init General
         working-directory: ./terraform/
         if: github.ref_name == 'general'
-        run: terraform init -backend-config=backend-general.tf
+        run: terraform init -backend-config=backend-general.hcl
 
       - name: Terraform Init Production
         working-directory: ./terraform/
