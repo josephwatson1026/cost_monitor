@@ -38,8 +38,13 @@ jobs:
         with:
           terraform_version: 1.14.3
 
-      # - name: Terraform Init
-      #   run: terraform init
+      - name: Terraform Init General
+        if: github.ref_name == 'general'
+        run: terraform init -backend-config=backend-general.tf
+
+      - name: Terraform Init Production
+        if: github.ref_name == 'main'
+        run: terraform init -backend-config=backend-production.tf
 
       # - name: Terraform Validate
       #   run: terraform validate
