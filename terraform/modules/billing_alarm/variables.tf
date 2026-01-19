@@ -9,3 +9,8 @@ variable "currency" {
   type = string
   default = "USD"
 }
+
+variable "alarm_actions" {
+  description = "actions resource from the main terraform"
+  type = list(string)
+}

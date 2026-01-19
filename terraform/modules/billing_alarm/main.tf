@@ -11,5 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "create_billing_alert" {
   dimensions = {
     Currency = "${var.currency}"
   }
+  threshold = var.billing_threshold[count.index]
+  alarm_actions = var.alarm_actions
 }
 

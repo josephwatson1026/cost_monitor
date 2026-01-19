@@ -1,9 +1,3 @@
-variable "aws_region" {
-  description = "The AWS region for setting up resources"
-  type        = string
-  default     = "us-east-1"
-}
-
 variable "telegram_token" {
   description = "The API token for the Telegram bot"
   type        = string
