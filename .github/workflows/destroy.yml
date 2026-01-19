@@ -1,27 +1,50 @@
-name: Terraform Destroy
+name: cost-monitor-destroy
 
 on:
-  workflow_dispatch: # This allows you to run it manually from the UI
+  workflow_dispatch: # Allows you to trigger this manually from the GitHub UI
+
+env:  
+  TF_VAR_telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
+  TF_VAR_telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+  AWS_REGION : "us-east-1"
+  # Mirrors your logic: uses the branch you run the workflow from to pick the role
+  ROLE_TO_ASSUME: ${{ github.ref_name == 'main' && 'arn:aws:iam::873580382677:role/GitHubAction-AssumeRoleWithAction' || 'arn:aws:iam::016714367715:role/GitHubAction-AssumeRoleWithAction' }}
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  destroy:
-    runs-on: ubuntu-latest
-    env:
-      TF_VAR_telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
-      TF_VAR_telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: 'us-east-1'
-
+  destroy-infrastructure:
+    runs-on: ubuntu-latest  
+    # Matches your environment logic
+    environment: ${{ github.ref_name == 'main' && 'production' || 'general' }}
+    
     steps:
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.3
 
       - name: Terraform Init
-        run: terraform init
+        working-directory: ./terraform/
+        # Matches your specific backend config logic
+        run: |
+          if [ "${{ github.ref_name }}" == "main" ]; then
+            terraform init -backend-config=backend-production.hcl
+          else
+            terraform init -backend-config=backend-general.hcl
+          fi
 
       - name: Terraform Destroy
+        working-directory: ./terraform/
         run: terraform destroy -auto-approve
