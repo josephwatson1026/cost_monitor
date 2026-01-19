@@ -1,3 +1,8 @@
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
+}
+
+module "billing_alarm_general" {
+  source = "./modules/billing_alarm"
+  billing_threshold = [1,2]
 }

@@ -48,8 +48,8 @@ jobs:
         if: github.ref_name == 'main'
         run: terraform init -backend-config=backend-production.tf
 
-      # - name: Terraform Validate
-      #   run: terraform validate
+      - name: Terraform Validate
+        run: terraform validate
 
-      # - name: Terraform Plan
-      #   run: terraform plan
+      - name: Terraform Plan
+        run: terraform plan
