@@ -8,6 +8,8 @@ on:
   pull_request:
 
 env:  
+  TF_VAR_telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
+  TF_VAR_telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
   AWS_REGION : "us-east-1"
   ROLE_TO_ASSUME: ${{ github.ref_name == 'main' && 'arn:aws:iam::873580382677:role/GitHubAction-AssumeRoleWithAction' || 'arn:aws:iam::016714367715:role/GitHubAction-AssumeRoleWithAction' }}
 
