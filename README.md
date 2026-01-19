@@ -30,8 +30,6 @@ A Terraform-based solution that monitors your AWS spending and sends real-time a
 │  $50, $100, $500    │     │   Lambda Exec    │
 └─────────────────────┘     └──────────────────┘
 
-
-![alt text](image.png)
 ```
 
 ## 📁 Project Structure
